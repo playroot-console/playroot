@@ -1,0 +1,31 @@
+[Unit]
+Description=OpenConsole Supervisor
+RequiresMountsFor=/data /data/games/project/openconsole
+Requires=weston.service openconsole-prepare.service
+Wants=systemd-udev-settle.service
+After=weston.service openconsole-prepare.service systemd-udev-settle.service
+
+[Service]
+Type=simple
+User=root
+RuntimeDirectory=openconsole
+RuntimeDirectoryMode=0700
+WorkingDirectory=/data/games/project/openconsole
+Environment=HOME=/data/home/root
+Environment=XDG_CACHE_HOME=/data/home/root/.cache
+Environment=XDG_CONFIG_HOME=/data/home/root/.config
+Environment=XDG_DATA_HOME=/data/home/root/.local/share
+Environment=XDG_RUNTIME_DIR=/run
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=OPENCONSOLE_GAMES_JSON=/data/games/project/openconsole/games.json
+Environment=OPENCONSOLE_SUPERVISOR_SOCKET=/run/openconsole/supervisor.sock
+ExecStartPre=/usr/libexec/openconsole-wait-for-wayland.sh /run/wayland-0 30
+ExecStartPre=/bin/sh -c 'for i in $(seq 1 30); do [ -c /dev/uinput ] && [ -d /dev/input ] && exit 0; sleep 1; done; echo "Timed out waiting for /dev/uinput" >&2; exit 1'
+ExecStart=/data/games/project/openconsole/openconsole
+StandardOutput=append:/data/openconsole-supervisor-systemd.log
+StandardError=append:/data/openconsole-supervisor-systemd.log
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=graphical.target

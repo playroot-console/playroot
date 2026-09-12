@@ -1,0 +1,159 @@
+{
+  "games": [
+    {
+      "id": "pirate-puzzle",
+      "title": "Pirate",
+      "showtitle": false,
+      "subtitle": "Puzzle | Installed",
+      "description": "Embark on a thrilling pirate adventure, solving puzzles and uncovering hidden treasures.",
+      "image": "assets/games/2/game.jpg",
+      "screenshots": [
+        "assets/games/2/screenshots/1.jpg",
+        "assets/games/2/screenshots/2.jpg",
+        "assets/games/2/screenshots/3.jpg",
+        "assets/games/2/screenshots/4.jpg"
+      ],
+      "developer": "PlayRoot",
+      "command": "/data/games/project/pirate.arm64",
+      "cwd": "/data/games/project",
+      "env": {
+        "XDG_RUNTIME_DIR": "/run",
+        "WAYLAND_DISPLAY": "wayland-0"
+      },
+      "env_remove": ["DISPLAY", "DRI_PRIME", "SLINT_BACKEND"],
+      "args": [
+        "--display-driver",
+        "wayland",
+        "--rendering-driver",
+        "opengl3",
+        "--fullscreen",
+        "--disable-vsync",
+        "--max-fps",
+        "60"
+      ]
+    },
+    {
+      "id": "pizza-delivery",
+      "title": "Pizza Delivery",
+      "showtitle": false,
+      "subtitle": "Strategy | Installed",
+      "description": "Deliver pizzas efficiently while managing obstacles and time constraints.",
+      "image": "assets/games/3/game.jpg",
+      "screenshots": [
+        "assets/games/3/screenshots/1.jpg",
+        "assets/games/3/screenshots/2.jpg",
+        "assets/games/3/screenshots/3.jpg",
+        "assets/games/3/screenshots/4.jpg"
+      ],
+      "developer": "PlayRoot",
+      "command": "/data/games/project/openconsole/run-game-as-weston.sh",
+      "cwd": "/data/games/project/openconsole",
+      "env": {
+        "OPENCONSOLE_GAME_BIN": "pizzadelivery.arm64",
+        "XDG_RUNTIME_DIR": "/run",
+        "WAYLAND_DISPLAY": "wayland-0"
+      },
+      "env_remove": ["DISPLAY", "DRI_PRIME", "SLINT_BACKEND"],
+      "args": [
+        "--display-driver",
+        "wayland",
+        "--rendering-driver",
+        "opengl3",
+        "--fullscreen",
+        "--disable-vsync",
+        "--max-fps",
+        "60"
+      ]
+    },
+    {
+      "id": "soko-bloom",
+      "showtitle": false,
+      "title": "Soko Bloom",
+      "subtitle": "Puzzle | Installed",
+      "description": "Solve challenging puzzles in a vibrant and colorful world.",
+      "image": "assets/games/4/game.jpg",
+      "developer": "PlayRoot",
+      "screenshots": [
+        "assets/games/4/screenshots/1.jpg",
+        "assets/games/4/screenshots/2.jpg",
+        "assets/games/4/screenshots/3.jpg",
+        "assets/games/4/screenshots/4.jpg"
+      ],
+      "command": "/data/games/project/openconsole/run-game-as-weston.sh",
+      "cwd": "/data/games/project/openconsole",
+      "env": {
+        "OPENCONSOLE_GAME_BIN": "puzzle.arm64",
+        "XDG_RUNTIME_DIR": "/run",
+        "WAYLAND_DISPLAY": "wayland-0"
+      },
+      "env_remove": ["DISPLAY", "DRI_PRIME", "SLINT_BACKEND"],
+      "args": [
+        "--display-driver",
+        "wayland",
+        "--rendering-driver",
+        "opengl3",
+        "--fullscreen",
+        "--disable-vsync",
+        "--max-fps",
+        "60"
+      ]
+    },
+    {
+      "id": "hogbound",
+      "showtitle": false,
+      "title": "Hogbound",
+      "subtitle": "Platformer | Installed",
+      "description": "Navigate through tricky platforming levels and overcome various challenges.",
+      "image": "assets/games/1/game.jpg",
+      "developer": "PlayRoot",
+      "screenshots": [
+        "assets/games/1/screenshots/1.jpg",
+        "assets/games/1/screenshots/2.jpg",
+        "assets/games/1/screenshots/3.jpg",
+        "assets/games/1/screenshots/4.jpg"
+      ],
+      "command": "/data/games/project/openconsole/run-game-as-weston.sh",
+      "cwd": "/data/games/project/openconsole",
+      "env": {
+        "OPENCONSOLE_GAME_BIN": "platform.arm64",
+        "XDG_RUNTIME_DIR": "/run",
+        "WAYLAND_DISPLAY": "wayland-0"
+      },
+      "env_remove": ["DISPLAY", "DRI_PRIME", "SLINT_BACKEND"],
+      "args": [
+        "--display-driver",
+        "wayland",
+        "--rendering-driver",
+        "opengl3",
+        "--fullscreen",
+        "--disable-vsync",
+        "--max-fps",
+        "60"
+      ]
+    }
+  ],
+  "all-games":[
+    {"id": "soko-bloom"},
+    {"id": "hogbound"},
+    {"id": "pirate-puzzle"},
+    {"id": "pizza-delivery"},
+    {"id": "soko-bloom"},
+    {"id": "hogbound"},
+    {"id": "pirate-puzzle"}
+  ],
+  "top-games":[
+    {"id": "pirate-puzzle"},
+    {"id": "soko-bloom"},
+    {"id": "hogbound"}
+  ],
+  "new-games":[
+    {"id": "pizza-delivery"},
+    {"id": "soko-bloom"},
+    {"id": "hogbound"},
+    {"id": "pirate-puzzle"},
+    {"id": "pizza-delivery"},
+    {"id": "soko-bloom"},
+    {"id": "hogbound"},
+    {"id": "pirate-puzzle"}
+  ]
+}

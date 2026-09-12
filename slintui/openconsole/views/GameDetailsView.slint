@@ -1,0 +1,243 @@
+import { Globals } from "../globals.slint";
+import { FavIcon } from "../components/FavIcon.slint";
+
+export component GameDetailsView inherits Rectangle {
+    in property <int> selected-game: 0;
+    in property <int> selected-control: 0;
+    in property <bool> focused: false;
+    in property <bool> launching: false;
+    in property <string> launch-status;
+    in property <[string]> game-titles;
+    in property <[string]> game-subtitles;
+    in property <image> game-cover;
+    in property <bool> game-cover-loading: false;
+    in property <[image]> game-screenshots;
+    in property <bool> game-screenshots-loading: false;
+    in property <bool> game-favorite: false;
+    in property <string> game-developer;
+    in property <string> game-description;
+    in property <bool> screenshot-popup-open: false;
+    in-out property <int> selected-screenshot-index: 0;
+    callback go-back();
+    callback play-now();
+    callback toggle_favorite();
+    callback select_screenshot(int);
+    callback dismiss_screenshot_popup();
+
+    background: Globals.background-color;
+
+    property <color> loader-color: #d6ddd8;
+
+    Image {
+        x: 0px;
+        y: 10px;
+        width: parent.width;
+        height: 550px;
+        source: root.game-cover;
+        image-fit: cover;
+    }
+
+    if root.game-cover-loading : Rectangle {
+        x: (parent.width - 360px) / 2;
+        y: 210px;
+        width: 360px;
+        height: 86px;
+        background: #18201d;
+        border-radius: 18px;
+        opacity: 0.8;
+
+        Text {
+            width: parent.width;
+            height: parent.height;
+            text: "Loading banner...";
+            color: root.loader-color;
+            font-size: 24px;
+            font-weight: 700;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+    }
+
+    Image {
+        x: 0px;
+        y: 10px;
+        width: 1090px;
+        height: 550px;
+        source: @image-url("../assets/game_overlay.png");
+        image-fit: cover;
+        opacity: 0.55;
+    }
+
+    Text {
+        x: 64px;
+        y: 270px;
+        text: root.selected-game < root.game-titles.length ? root.game-titles[root.selected-game] : "";
+        color: #ffffff;
+        font-size: 64px;
+        font-weight: 800;
+    }
+
+    Text {
+        x: 64px;
+        y: 350px;
+        text: root.selected-game < root.game-subtitles.length ? root.game-subtitles[root.selected-game] : "";
+        color: #e5ebe7;
+        font-size: 22px;
+    }
+
+    Rectangle {
+        x: 64px;
+        y: 430px;
+        width: 280px;
+        height: 70px;
+        border-radius: 35px;
+        background: root.launching ? #96a19b : #00C663;
+        border-width: root.focused && root.selected-control == 1 ? 6px : 0px;
+        border-color: #effff5;
+        Text {
+            y: 2px;
+            height: 70px;
+            text: root.launching ? "RUNNING" : "Play Now";
+            color: #fff;
+            font-size: 30px;
+            font-weight: 800;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+        TouchArea { enabled: !root.launching; clicked => { root.play-now(); } }
+    }
+
+    FavIcon {
+        x: 380px;
+        y: 430px;
+        selected: root.focused && root.selected-control == 2;
+        isFavorite: root.game-favorite;
+        activated => { root.toggle_favorite(); }
+    }
+
+    Text {
+        x: 64px;
+        y: 596px;
+        width: 952px;
+        wrap: word-wrap;
+        text: root.game-description;
+        color: #9ea7a2;
+        font-size: 16px;
+    }
+
+    Text {
+        x: 64px;
+        y: 930px;
+        text: "Developed by: " + root.game-developer;
+        color: #9ea7a2;
+        font-size: 20px; 
+    }
+
+
+    for screenshot[index] in root.game-screenshots : Rectangle {
+        x: 64px + index * 460px;
+        y: 670px;
+        width: 410px;
+        height: 230px;
+        border-radius: 6px;
+        border-width: (root.selected-control == 3 || root.screenshot-popup-open) && root.selected-screenshot-index == index ? 6px : 0px;
+        border-color: #fff;
+        clip: true;
+
+        Image {
+            x: 6px;
+            y: 6px;
+            width: 398px;
+            height: 224px;
+            source: screenshot;
+            image-fit: cover;
+        }
+
+        TouchArea {
+            clicked => {
+                root.select_screenshot(index);
+            }
+        }
+    }
+
+    if root.game-screenshots-loading : Rectangle {
+        x: 64px;
+        y: 670px;
+        width: 410px;
+        height: 230px;
+        background: #18201d;
+        border-radius: 18px;
+        opacity: 0.8;
+
+        Text {
+            width: parent.width;
+            height: parent.height;
+            text: "Loading screenshots...";
+            color: root.loader-color;
+            font-size: 24px;
+            font-weight: 700;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+    }
+
+    Rectangle {
+        x: 0px;
+        y: 0px;
+        width: parent.width;
+        height: parent.height;
+        background: #00000099;
+        opacity: root.screenshot-popup-open ? 1 : 0;
+        animate opacity { duration: 180ms; easing: ease-in-out; }
+
+        Rectangle {
+            x: (parent.width - 1280px) / 2;
+            y: (parent.height - 760px) / 2;
+            width: 1280px;
+            height: 760px;
+            border-radius: 10px;
+            background: #111111;
+            border-width: 6px;
+            border-color: #ffffff;
+            clip: true;
+
+            Image {
+                x: 6px;
+                y: 6px;
+                width: 1268px;
+                height: 748px;
+                source: root.selected-screenshot-index < root.game-screenshots.length ? root.game-screenshots[root.selected-screenshot-index] : root.game-cover;
+                image-fit: cover;
+            }
+
+            if root.game-screenshots-loading : Rectangle {
+                x: (parent.width - 420px) / 2;
+                y: (parent.height - 96px) / 2;
+                width: 420px;
+                height: 96px;
+                background: #18201d;
+                border-radius: 18px;
+                opacity: 0.8;
+
+                Text {
+                    width: parent.width;
+                    height: parent.height;
+                    text: "Loading screenshot...";
+                    color: root.loader-color;
+                    font-size: 24px;
+                    font-weight: 700;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+        }
+
+        TouchArea {
+            enabled: root.screenshot-popup-open;
+            clicked => { root.dismiss_screenshot_popup(); }
+        }
+    }
+
+    
+
+}

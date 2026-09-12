@@ -1,0 +1,11 @@
+# A/B slot layout for Raspberry Pi media.
+# Each slot contains a boot partition and a root filesystem partition.
+# /data is the only writable persistent partition.
+
+part --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot_a --active --align 4096 --fixed-size 128 --sourceparams="loader=u-boot"
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs_a --align 4096 --fixed-size 2048 --use-uuid --fsoptions "ro"
+part --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot_b --align 4096 --fixed-size 128 --sourceparams="loader=u-boot"
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs_b --align 4096 --fixed-size 2048 --use-uuid --fsoptions "ro"
+part /data --ondisk mmcblk0 --fstype=ext4 --label data --align 4096 --use-uuid --fsoptions "defaults,x-systemd.device-timeout=30s" --size 4096
+
+bootloader --ptable gpt

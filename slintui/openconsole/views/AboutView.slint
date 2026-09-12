@@ -1,0 +1,71 @@
+export component AboutView inherits Rectangle {
+    in property <string> version: "0.1.1";
+    callback go_back();
+
+    background: #292929;
+
+    Text {
+        y: 72px;
+        width: parent.width;
+        text: "About";
+        color: #f4f7f5;
+        font-size: 42px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+    Rectangle {
+        x: parent.width / 2 - 500px;
+        y: 180px;
+        width: 1000px;
+        height: 320px;
+        
+        Text {
+            x: 0px;
+            y: 0px;
+            width: 1000px;
+            text: "PlayRoot is an open game console built for a new generation of play.\n\nWe believe great games can be accessible to everyone—free, without ads, in-game purchases, or barriers between players and the experiences they love.\n\nPlayRoot brings players and creators together in one open, community-driven platform. A place to discover new worlds, share ideas, and turn great concepts into unforgettable games.";
+            color: #eef2ef;
+            font-size: 19px;
+            wrap: word-wrap;
+            horizontal-alignment: center;
+        }
+
+        Text {
+            x: 0px;
+            y: 220px;
+            width: 1000px;
+            text: "Built to inspire. Made to bring joy.";
+            color: #eef2ef;
+            font-size: 19px;
+            wrap: word-wrap;
+            horizontal-alignment: center;
+            font-weight: 800;
+        }
+
+
+        Text {
+            x: 0px;
+            y: 400px;
+            width: 1000px;
+            text: "Version";
+            color: #434343;
+            font-size: 14px;
+            font-weight: 800;
+            horizontal-alignment: center;
+        }
+
+        Text {
+            x: 0px;
+            y: 430px;
+            width: 1000px;  
+            text: version;
+            color: #ffffff;
+            font-size: 30px;
+            font-weight: 800;
+            horizontal-alignment: center;
+        }
+
+    }
+
+}

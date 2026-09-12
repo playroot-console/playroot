@@ -1,0 +1,19 @@
+PlayRoot
+Copyright (C) 2026  PlayRoot
+
+License Summary
+
+PlayRoot is open source software released under the GNU General Public
+License version 3, or, at your option, any later version.
+
+In practical terms, GPLv3 means:
+
+- You may use, study, modify, and redistribute this project.
+- If you distribute modified versions or binaries based on this project,
+  you must also make the corresponding source code available under the
+  same GPL terms.
+- You must keep existing copyright and license notices intact.
+- The software is provided without warranty.
+
+This file is a short explanation for repository readers. For the full
+license text, see https://www.gnu.org/licenses/gpl-3.0.html

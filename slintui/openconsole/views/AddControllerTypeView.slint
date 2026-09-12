@@ -1,0 +1,147 @@
+export component AddControllerTypeView inherits Rectangle {
+    in property <bool> focused: false;
+    in property <int> selected-type: 0;
+    in property <string> status-text: "";
+
+    in property <length> item-spacing: 40px;
+    in property <length> item-height: 240px;
+    in property <length> item-width: 460px;
+    in property <length> item-radius: 30px;
+
+    background: #0b0c10;
+
+    callback select_type(int);
+
+    Text {
+        y: 72px;
+        width: parent.width;
+        text: "Add Controller";
+        color: #f4f7f5;
+        font-size: 42px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+    // NES Controller
+    Rectangle {
+            x: (parent.width / 2) - root.item-width / 2 - root.item-spacing - root.item-width;
+            y: 248px;
+            width: root.item-width;
+            height: root.item-height;
+            background:  #414141;
+            border-width: root.focused && root.selected-type == 0 ? 4px : 0px;
+            border-color: #fff;
+            border-radius: 30px;
+        
+        
+        Text {
+                x: 32px;
+                y: parent.height - 42px;
+                text: "NES USB Gamepad";
+                color: #eef2ef;
+                font-size: 24px;
+                font-weight: 700;
+                width: parent.width - 64px;
+                height: 32px;
+                vertical-alignment: center;
+                horizontal-alignment: center;
+        }
+        
+        Image {
+            x: 32px;
+            y: 4px;
+            width: parent.width - 64px;
+            height: parent.height - 50px;
+            source: @image-url("../assets/nes_controller.png"); 
+            image-fit: ImageFit.contain; 
+            vertical-alignment: center; 
+
+        }
+
+        TouchArea { clicked => { root.select_type(0); } }
+
+    }
+
+
+    // SNES Controller
+    Rectangle {
+            x: (parent.width / 2) - root.item-width / 2;
+            y: 248px;
+            width: root.item-width;
+            height: root.item-height;
+            background:  #414141;
+            border-width: root.focused && root.selected-type == 1 ? 4px : 0px;
+            border-color: #fff;
+            border-radius: 30px;
+        
+        
+        Text {
+                x: 32px;
+                y: parent.height - 42px;
+                text: "SNES USB Gamepad";
+                color: #eef2ef;
+                font-size: 24px;
+                font-weight: 700;
+                width: parent.width - 64px;
+                height: 32px;
+                vertical-alignment: center;
+                horizontal-alignment: center;
+        }
+        
+        Image {
+            x: 32px;
+            y: 4px;
+            width: parent.width - 64px;
+            height: parent.height - 50px;
+            source: @image-url("../assets/snes_controller.png"); 
+            image-fit: ImageFit.contain; 
+            vertical-alignment: center; 
+
+        }
+
+        TouchArea { clicked => { root.select_type(1); } }
+
+    }
+
+    // PS 5 Controller
+    Rectangle {
+            x: (parent.width / 2) + root.item-width / 2 + root.item-spacing;
+            y: 248px;
+            width: root.item-width;
+            height: root.item-height;
+            background:  #414141;
+            border-width: root.focused && root.selected-type == 2 ? 4px : 0px;
+            border-color: #fff;
+            border-radius: 30px;
+        
+        
+        Text {
+                x: 32px;
+                y: parent.height - 42px;
+            text: "PS5 DualSense Controller";
+                color: #eef2ef;
+                font-size: 24px;
+                font-weight: 700;
+                width: parent.width - 64px;
+                height: 32px;
+                vertical-alignment: center;
+                horizontal-alignment: center;
+        }
+        
+        Image {
+            x: 32px;
+            y: 4px;
+            width: parent.width - 64px;
+            height: parent.height - 50px;
+            source: @image-url("../assets/ps5_controller.png"); 
+            image-fit: ImageFit.contain; 
+            vertical-alignment: center; 
+
+        }
+
+        TouchArea { clicked => { root.select_type(2); } }
+
+    }
+
+    
+}

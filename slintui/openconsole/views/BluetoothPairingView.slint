@@ -1,0 +1,163 @@
+export component BluetoothPairingView inherits Rectangle {
+    in property <string> status-text: "";
+    in property <string> device-list-text: "";
+    in property <string> debug-text: "";
+    in property <[string]> device-names: [];
+    in property <int> selected-index: 0;
+    in property <bool> selected-paired: false;
+    in-out property <int> selected-action: 0;
+    in property <bool> show-intro: false;
+    in property <bool> scan-running: false;
+    in property <bool> light-off-visible: false;
+    in property <bool> focused: false;
+    callback scan_devices();
+    callback pair_or_continue();
+    callback unpair_device();
+    callback cancel();
+    callback select_device(int);
+
+    background: #292929;
+
+    property <length> row-width: 900px;
+    property <length> row-height: 60px;
+    property <length> row-spacing: 20px;
+    property <length> row-radius: 30px;
+    property <length> row-start-y: 330px;
+
+    Text {
+        y: 72px;
+        width: parent.width;
+        text: "Pair PS5 DualSense";
+        color: #ffffff;
+        font-size: 42px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+    if root.show-intro : Rectangle {
+        x: parent.width / 2 - 360px;
+        y: 120px;
+        width: 720px;
+        height: 384px;
+        background: transparent;
+
+        Image {
+            x: 0px;
+            y: 0px;
+            width: parent.width;
+            height: parent.height;
+            source: @image-url("../assets/controllers/dualsense/linking_light_on.png");
+            image-fit: contain;
+        }
+
+        Image {
+            x: 0px;
+            y: 0px;
+            width: parent.width;
+            height: parent.height;
+            source: @image-url("../assets/controllers/dualsense/linking_light_off.png");
+            image-fit: contain;
+            opacity: root.light-off-visible ? 1 : 0;
+        }
+    }
+
+    if root.show-intro : Text {
+        y: 540px;
+        width: parent.width;
+        text: "Press both buttons on your controller to enable bluetooth pairing mode.";
+        color: #d0d0d0;
+        font-size: 24px;
+        horizontal-alignment: center;
+    }
+
+    if !root.show-intro && root.scan-running : Text {
+        y: 500px;
+        width: parent.width;
+        text: "Searching bluetooth devices";
+        color: #d0d0d0;
+        font-size: 28px;
+        horizontal-alignment: center;
+    }
+
+    if !root.show-intro && !root.scan-running : Text {
+        y: root.device-names.length > 0 ? 600px : 500px;
+        x: parent.width / 2 - 500px;
+        width: 1000px;
+        text: root.status-text;
+        color: #d0d0d0;
+        font-size: 20px;
+        wrap: word-wrap;
+        horizontal-alignment: center;
+    }
+
+    Rectangle {
+        x: 0px;
+        y: 0px;
+        width: parent.width;
+        height: parent.height;
+        background: transparent;
+        visible: !root.show-intro && !root.scan-running;
+
+        for item[index] in root.device-names : Rectangle {
+            x: parent.width / 2 - root.row-width / 2;
+            y: root.row-start-y + (index * (root.row-height + root.row-spacing));
+            width: root.row-width;
+            height: root.row-height;
+            background: root.focused && root.selected-action == 1 && root.selected-index == index ? #ffffff : #414141;
+            border-radius: root.row-radius;
+
+            Text {
+                width: parent.width;
+                height: parent.height;
+                text: item;
+                color: root.focused && root.selected-action == 1 && root.selected-index == index ? #414141 : #ffffff;
+                font-size: 18px;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+
+            TouchArea {
+                clicked => {
+                    root.select_device(index);
+                    root.selected-action = 1;
+                    root.pair_or_continue();
+                }
+            }
+        }
+    }
+
+    if root.show-intro || (!root.scan-running && root.device-names.length == 0) : Rectangle {
+        x: parent.width / 2 - root.row-width / 2;
+        y: root.show-intro ? 660px : 700px;
+        width: root.row-width;
+        height: root.row-height;
+
+        Rectangle {
+            x: 0px;
+            y: 0px;
+            width: root.row-width;
+            height: root.row-height;
+            background: root.focused && root.selected-action == 0 ? #ffffff : #5ba069;
+            border-radius: root.row-radius;
+
+            Text {
+                x: 0px;
+                y: 0px;
+                width: root.row-width;
+                height: root.row-height;
+                text: root.show-intro ? "Continue" : "Scan devices";
+                color: root.focused && root.selected-action == 0 ? #000000 : #d0ffd6;
+                font-size: 18px;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+
+        TouchArea {
+            clicked => {
+                root.selected-action = 0;
+                root.scan_devices();
+            }
+        }
+    }
+}

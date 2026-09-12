@@ -1,0 +1,194 @@
+export component ControllerMappingView inherits Rectangle {
+
+    in property <bool> focused: false;
+    in property <string> controller-title: "";
+    in property <string> progress-text: "";
+    in property <string> instruction-text: "";
+    in property <string> last-input-text: "";
+    in property <int> art-stage: 0;
+    in property <string> artwork-set: "snes";
+    in property <string> current-button-text: "";
+    in property <string> overlay-name: "";
+    in property <int> progress-percent: 0;
+
+    background: #292929;
+
+
+    // Title
+    Text {
+        y: 56px;
+        width: parent.width;
+        text: root.controller-title;
+        color: #ffffff;
+        font-size: 40px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+    // Controller images
+    Rectangle {
+        x: parent.width / 2 - 470px;
+        y: 156px;
+        width: 940px;
+        height: 410px; 
+        border-radius: 6px;
+
+        Image {
+            x: 32px;
+            y: 32px;
+            width: parent.width - 64px;
+            height: parent.height - 64px;
+            source: root.artwork-set == "nes"
+                ? @image-url("../assets/controllers/nes/background.png")
+                : root.artwork-set == "dualsense"
+                ? (
+                    root.art-stage == 1 ? @image-url("../assets/controllers/dualsense/anim1.png")
+                    : root.art-stage == 2 ? @image-url("../assets/controllers/dualsense/anim2.png")
+                    : root.art-stage == 3 ? @image-url("../assets/controllers/dualsense/anim3.png")
+                    : root.art-stage == 4 ? @image-url("../assets/controllers/dualsense/anim4.png")
+                    : root.art-stage == 5 ? @image-url("../assets/controllers/dualsense/anim5.png")
+                    : root.art-stage == 6 ? @image-url("../assets/controllers/dualsense/anim6.png")
+                    : root.art-stage == 7 ? @image-url("../assets/controllers/dualsense/anim7.png")
+                    : root.art-stage == 8 ? @image-url("../assets/controllers/dualsense/anim8.png")
+                    : root.art-stage == 9 ? @image-url("../assets/controllers/dualsense/anim9.png")
+                    : root.art-stage == 10 ? @image-url("../assets/controllers/dualsense/anim10.png")
+                    : root.art-stage == 11 ? @image-url("../assets/controllers/dualsense/anim11.png")
+                    : root.art-stage == 12 ? @image-url("../assets/controllers/dualsense/anim12.png")
+                    : root.art-stage == 13 ? @image-url("../assets/controllers/dualsense/anim13.png")
+                    : root.art-stage == 14 ? @image-url("../assets/controllers/dualsense/anim14.png")
+                    : root.art-stage == 15 ? @image-url("../assets/controllers/dualsense/anim15.png")
+                    : root.art-stage == 16 ? @image-url("../assets/controllers/dualsense/anim16.png")
+                    : root.art-stage == 17 ? @image-url("../assets/controllers/dualsense/anim17.png")
+                    : root.art-stage >= 18 ? @image-url("../assets/controllers/dualsense/background_top.png")
+                    : @image-url("../assets/controllers/dualsense/background_front.png")
+                )
+                : @image-url("../assets/controllers/snes/background.png"); 
+            image-fit: ImageFit.contain; 
+            vertical-alignment: center; 
+        }
+
+        Image {
+            x: 32px;
+            y: 32px;
+            width: parent.width - 64px;
+            height: parent.height - 64px;
+            visible: root.overlay-name != ""
+                && !(root.artwork-set == "dualsense" && root.art-stage > 0 && root.art-stage < 18);
+            source: root.artwork-set == "nes"
+                ? (
+                    root.overlay-name == "up" ? @image-url("../assets/controllers/nes/up.png")
+                    : root.overlay-name == "down" ? @image-url("../assets/controllers/nes/down.png")
+                    : root.overlay-name == "left" ? @image-url("../assets/controllers/nes/left.png")
+                    : root.overlay-name == "right" ? @image-url("../assets/controllers/nes/right.png")
+                    : root.overlay-name == "select" ? @image-url("../assets/controllers/nes/select.png")
+                    : root.overlay-name == "start" ? @image-url("../assets/controllers/nes/start.png")
+                    : root.overlay-name == "b" ? @image-url("../assets/controllers/nes/b.png")
+                    : @image-url("../assets/controllers/nes/a.png")
+                )
+                : root.artwork-set == "dualsense"
+                ? (
+                    root.overlay-name == "up" ? @image-url("../assets/controllers/dualsense/up.png")
+                    : root.overlay-name == "down" ? @image-url("../assets/controllers/dualsense/down.png")
+                    : root.overlay-name == "left" ? @image-url("../assets/controllers/dualsense/left.png")
+                    : root.overlay-name == "right" ? @image-url("../assets/controllers/dualsense/right.png")
+                    : root.overlay-name == "cross" ? @image-url("../assets/controllers/dualsense/cross.png")
+                    : root.overlay-name == "circle" ? @image-url("../assets/controllers/dualsense/circle.png")
+                    : root.overlay-name == "square" ? @image-url("../assets/controllers/dualsense/square.png")
+                    : root.overlay-name == "triangle" ? @image-url("../assets/controllers/dualsense/triangle.png")
+                    : root.overlay-name == "select" ? @image-url("../assets/controllers/dualsense/select.png")
+                    : root.overlay-name == "start" ? @image-url("../assets/controllers/dualsense/start.png")
+                    : root.overlay-name == "touch_area" ? @image-url("../assets/controllers/dualsense/touch_area.png")
+                    : root.overlay-name == "mute" ? @image-url("../assets/controllers/dualsense/mute.png")
+                    : root.overlay-name == "l1" ? @image-url("../assets/controllers/dualsense/l1.png")
+                    : root.overlay-name == "l2" ? @image-url("../assets/controllers/dualsense/l2.png")
+                    : root.overlay-name == "r1" ? @image-url("../assets/controllers/dualsense/r1.png")
+                    : root.overlay-name == "r2" ? @image-url("../assets/controllers/dualsense/r2.png")
+                    : @image-url("../assets/controllers/dualsense/background_front.png")
+                )
+                : (
+                    root.overlay-name == "up" ? @image-url("../assets/controllers/snes/up.png")
+                    : root.overlay-name == "down" ? @image-url("../assets/controllers/snes/down.png")
+                    : root.overlay-name == "left" ? @image-url("../assets/controllers/snes/left.png")
+                    : root.overlay-name == "right" ? @image-url("../assets/controllers/snes/right.png")
+                    : root.overlay-name == "select" ? @image-url("../assets/controllers/snes/select.png")
+                    : root.overlay-name == "start" ? @image-url("../assets/controllers/snes/start.png")
+                    : root.overlay-name == "topleft" ? @image-url("../assets/controllers/snes/topleft.png")
+                    : root.overlay-name == "topright" ? @image-url("../assets/controllers/snes/topright.png")
+                    : root.overlay-name == "y" ? @image-url("../assets/controllers/snes/y.png")
+                    : root.overlay-name == "x" ? @image-url("../assets/controllers/snes/x.png")
+                    : root.overlay-name == "b" ? @image-url("../assets/controllers/snes/b.png")
+                    : @image-url("../assets/controllers/snes/a.png")
+                );
+            image-fit: ImageFit.contain; 
+            vertical-alignment: center; 
+        }
+
+    }
+
+    // Action title
+    HorizontalLayout {
+        visible: root.current-button-text != "";
+        alignment: center; 
+        spacing: 10px;
+        width: parent.width;
+        height: 40px;
+        y:560px;
+        Text {
+            text: "Press the ";
+            font-size: 20px;
+            vertical-alignment: bottom;
+            color: #ffffff;
+        }
+        Text {
+            text: root.current-button-text;
+            font-size: 40px;       
+            color: #ffffff;  
+            vertical-alignment: bottom;
+            font-weight: 800;
+        }
+        Text {
+            text: " button till the bar is completed.";
+            font-size: 20px;
+            vertical-alignment: bottom;
+            color: #ffffff;
+        }
+    }
+
+    
+    // Action progress
+    Rectangle {
+        x: parent.width / 2 - 200px;
+        y: 640px;
+        width: 400px;
+        height: 20px;
+        border-radius: 10px; 
+        background: #414141;
+        Rectangle {
+            width: parent.width * root.progress-percent / 100;
+            height: parent.height;
+            background: #ffffff;
+            border-radius: 10px;
+            x:0px;
+        }
+    }
+
+    Text {
+        y: 690px;
+        width: parent.width;
+        text: root.last-input-text;
+        color: #a7b8ad;
+        font-size: 16px;
+        horizontal-alignment: center;
+    }
+
+    Text {
+        y: 724px;
+        width: parent.width;
+        text: "Press the keyboard ESC key to cancel";
+        color: #858d88;
+        font-size: 13px;
+        horizontal-alignment: center;
+    }
+
+
+}

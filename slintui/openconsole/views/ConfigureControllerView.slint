@@ -1,0 +1,80 @@
+export component ConfigureControllerView inherits Rectangle {
+    in property <bool> focused: false;
+    in property <string> controller-title: "";
+    in property <string> progress-text: "";
+    in property <string> mapping-lines: "";
+    in property <string> device-list-text: "";
+    in property <[string]> device-names: [];
+    in property <int> selected-device: 0;
+    in property <string> instruction-text: "";
+    in property <string> last-input-text: "";
+    in property <bool> device-selection: false;
+    in property <bool> setup-complete: false;
+    in property <int> final-selection: 0;
+
+    in property <length> item-spacing: 20px;
+    in property <length> item-height: 60px;
+    in property <length> item-width: 900px;
+    in property <length> item-radius: 30px;
+    in property <length> start-y: 250px;
+
+    background: #292929;
+
+    Text {
+        y: 72px;
+        width: parent.width;
+        text: "Configure Controller";
+        color: #ffffff;
+        font-size: 42px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+    Text {
+        y: 142px;
+        width: parent.width;
+        text: root.controller-title;
+        color: #b8b8b8;
+        font-size: 24px;
+        horizontal-alignment: center;
+    }
+
+    for item[index] in root.device-names : Rectangle {
+        x: parent.width / 2 - root.item-width / 2;
+        y: root.start-y + (index * (root.item-height + root.item-spacing));
+        width: root.item-width;
+        height: root.item-height;
+        background: root.focused && root.selected-device == index ? #ffffff : #414141;
+        border-radius: root.item-radius;
+
+        Text {
+            width: parent.width;
+            height: parent.height;
+            text: item;
+            color: root.focused && root.selected-device == index ? #414141 : #ffffff;
+            font-size: 18px;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+    }
+
+    if root.device-names.length == 0 : Rectangle {
+        x: parent.width / 2 - root.item-width / 2;
+        y: root.start-y;
+        width: root.item-width;
+        height: root.item-height;
+        background: #414141;
+        border-radius: root.item-radius;
+
+        Text {
+            width: parent.width;
+            height: parent.height;
+            text: "No controller detected";
+            color: #ffffff;
+            font-size: 18px;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+    }
+
+}

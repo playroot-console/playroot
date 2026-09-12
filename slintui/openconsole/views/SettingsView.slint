@@ -1,0 +1,33 @@
+export component SettingsView inherits Rectangle {
+    in property <int> selected-setting: 0;
+    in property <bool> focused: false;
+
+    in property <length> item-spacing: 20px;
+    in property <length> item-height: 60px;
+    in property <length> item-width: 600px;
+    in property <length> item-radius: 30px;
+    in property <length> start-y: 250px;
+    background: #292929; 
+     
+    // system btn
+    Rectangle { x: parent.width / 2 - root.item-width / 2; y: root.start-y; width: root.item-width; height: root.item-height; background: root.focused && root.selected-setting == 0 ? #ffffff : #414141; border-radius: root.item-radius; } 
+    Text { x: parent.width / 2 - root.item-width / 2; y: root.start-y; width: root.item-width; height: root.item-height; text: "System"; color:  root.focused && root.selected-setting == 0 ? #414141 : #ffffff; font-size: 18px; horizontal-alignment: center; vertical-alignment: center; }  
+   
+    // network btn
+    Rectangle { x: parent.width / 2 - root.item-width / 2; y: root.start-y + (1 * (root.item-height + root.item-spacing)); width: root.item-width; height: root.item-height; background: root.focused && root.selected-setting == 1 ? #ffffff : #414141; border-radius: root.item-radius; } 
+    Text { x: parent.width / 2 - root.item-width / 2; y: root.start-y + (1 * (root.item-height + root.item-spacing)); width: root.item-width; height: root.item-height; text: "Network";  color: root.focused && root.selected-setting == 1 ? #414141 : #ffffff; font-size: 18px; horizontal-alignment: center; vertical-alignment: center; }  
+
+    // Game Controller btn
+    Rectangle { x: parent.width / 2 - root.item-width / 2; y: root.start-y + (2 * (root.item-height + root.item-spacing)); width: root.item-width; height: root.item-height; background: root.focused && root.selected-setting == 2 ? #ffffff : #414141; border-radius: root.item-radius; } 
+    Text { x: parent.width / 2 - root.item-width / 2; y: root.start-y + (2 * (root.item-height + root.item-spacing)); width: root.item-width; height: root.item-height; text: "Manage Game Controllers";  color: root.focused && root.selected-setting == 2 ? #414141 : #ffffff;  font-size: 18px; horizontal-alignment: center; vertical-alignment: center; }  
+
+    // About btn
+    Rectangle { x: parent.width / 2 - root.item-width / 2; y: root.start-y + (3 * (root.item-height + root.item-spacing)); width: root.item-width; height: root.item-height; background: root.focused && root.selected-setting == 3 ? #ffffff : #414141; border-radius: root.item-radius; } 
+    Text { x: parent.width / 2 - root.item-width / 2; y: root.start-y + (3 * (root.item-height + root.item-spacing)); width: root.item-width; height: root.item-height; text: "About";  color: root.focused && root.selected-setting == 3 ? #414141 : #ffffff;  font-size: 18px; horizontal-alignment: center; vertical-alignment: center; }  
+
+    // Restart btn
+    Rectangle { x: parent.width / 2 - root.item-width / 2; y: root.start-y + (4 * (root.item-height + root.item-spacing)); width: root.item-width; height: root.item-height; background: root.focused && root.selected-setting == 4 ? #ad2828 : #cf6d6d; border-radius: root.item-radius; } 
+    Text { x: parent.width / 2 - root.item-width / 2; y: root.start-y + (4 * (root.item-height + root.item-spacing)); width: root.item-width; height: root.item-height; text: "Restart  ";  color: root.focused && root.selected-setting == 4 ? #ffffff : #ffffff;  font-size: 18px; horizontal-alignment: center; vertical-alignment: center; }  
+
+
+}

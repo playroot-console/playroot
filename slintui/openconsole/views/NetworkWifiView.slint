@@ -1,0 +1,137 @@
+export component NetworkWifiView inherits Rectangle {
+    in property <string> status-text: "";
+    in property <string> placeholder-text: "";
+    in property <[string]> network-names: [];
+    in property <[bool]> network-secured: [];
+    in property <[int]> network-states: [];
+    in property <int> base-index: 0;
+    in property <int> selected-index;
+    in-out property <int> selected-action: 1;
+    in property <bool> focused: false;  
+    in property <string> ethernet-status-title: "Disconnected"; 
+    in property <string> ethernet-status-detail: "No network cable is connected.";
+    in property <string> wifi-status-title: "Disconnected"; 
+    in property <string> wifi-status-detail: "No Wi-Fi network is connected.";
+    callback scan_networks();
+    callback select_network(int);
+    callback activate_network();
+    callback cancel();
+
+    in property <length> item-spacing: 20px;
+    in property <length> item-height: 60px;
+    in property <length> item-width: 600px;
+    in property <length> item-radius: 30px;
+    in property <length> start-y: 200px;
+
+    //callback toggle_wifi(); 
+    //callback toggle_bluetooth();
+
+    background: #292929;
+
+
+    Text {
+        y: 72px;
+        width: parent.width;
+        text: "WiFi";
+        color: #f4f7f5;
+        font-size: 42px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+    Text { x: parent.width / 2 - (root.item-width / 2); y: 150px; width: root.item-width; text: "Choose a network:"; color: #eef2ef; font-size: 20px; }
+
+    Text {
+        x: parent.width / 2 - (root.item-width / 2);
+        y: 250px;
+        width: root.item-width;
+        visible: root.network-names.length == 0 && root.placeholder-text != "";
+        text: root.placeholder-text;
+        color: #eef2ef;
+        font-size: 20px;
+        wrap: word-wrap;
+    }
+
+    for network-name[index] in root.network-names : Rectangle {
+        x: parent.width / 2 - root.item-width / 2;
+        y: root.start-y + index * (root.item-height + root.item-spacing);
+        visible: true;
+        width: root.item-width;
+        height: root.item-height;
+        border-radius: root.item-radius;
+        clip: false;
+
+        background: root.focused && root.selected-index == index ? #ffffff : #15181d;
+
+        Text {
+            x: 28px;
+            y: 0px;
+            height: root.item-height;
+            text: network-name;
+            color: root.focused && root.selected-index == index ? #000000 : #eef2ef;
+            font-size: 20px;
+            font-weight: 700;
+            vertical-alignment: center;
+            horizontal-alignment: left;
+            width: parent.width - 160px;
+        }
+
+        Image {
+            x: parent.width - 140px;
+            y: 10px;
+            height: 40px;
+            visible: index < root.network-states.length && root.network-states[index] == 0 && index < root.network-secured.length && root.network-secured[index];
+            source: root.focused && root.selected-index == index ? @image-url("../assets/wifi_lock_black.png") : @image-url("../assets/wifi_lock_white.png");
+            image-fit: ImageFit.contain;
+            vertical-alignment: center;
+        }
+
+        Image {
+            x: parent.width - 80px;
+            y: 10px;
+            height: 40px;
+            visible: index < root.network-states.length && root.network-states[index] == 0;
+            source: root.focused && root.selected-index == index ? @image-url("../assets/wifi_black.png") : @image-url("../assets/wifi_white.png");
+            image-fit: ImageFit.contain;
+            vertical-alignment: center;
+        }
+
+        Text {
+            x: 28px;
+            y: 0px;
+            height: root.item-height;
+            visible: index < root.network-states.length && root.network-states[index] != 0;
+            text: index < root.network-states.length && root.network-states[index] == 1 ? "Connected" : "Unable to connect";
+            color: index < root.network-states.length && root.network-states[index] == 1 ? #00e82e : #ff4d4d;
+            font-size: 20px;
+            font-weight: 700;
+            vertical-alignment: center;
+            horizontal-alignment: right;
+            width: parent.width - 60px;
+        }
+
+        TouchArea {
+            clicked => {
+                if (root.selected-index == index) {
+                    root.activate_network();
+                } else {
+                    root.select_network(root.base-index + index);
+                }
+            }
+        }
+    }
+
+    Text {
+        y: 560px;
+        width: parent.width;
+        visible: root.network-names.length > 0 && root.status-text != "";
+        text: root.status-text;
+        color: #eef2ef;
+        font-size: 16px;
+        horizontal-alignment: center;
+    }
+  
+ 
+    
+    
+}

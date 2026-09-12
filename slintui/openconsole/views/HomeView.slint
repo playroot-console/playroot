@@ -1,0 +1,47 @@
+import { GameTile } from "../components/GameTile.slint";
+
+export component HomeView inherits Rectangle {
+    in property <[string]> favorite-game-titles;
+    in property <[string]> favorite-game-subtitles;
+    in property <[bool]> favorite-game-show-titles;
+    in property <[image]> favorite-game-covers;
+    in property <[int]> favorite-game-indices;
+    in property <int> favorite-game-selected-index: 0;
+    in property <[string]> recent-game-titles;
+    in property <[string]> recent-game-subtitles;
+    in property <[bool]> recent-game-show-titles;
+    in property <[image]> recent-game-covers;
+    in property <[int]> recent-game-indices;
+    in property <int> recent-game-selected-index: 0;
+    in property <int> selected-section: 0;
+    in property <bool> focused: false;
+    callback open-game(int);
+
+    background: #292929;
+
+    Text { x: 64px; y: 72px; text: "Favorite Games"; color: #f4f7f5; font-size: 42px; font-weight: 800; }
+    if root.favorite-game-titles.length == 0 : Text { x: 64px; y: 142px; text: "No favorite games yet.."; color: #929994; font-size: 18px; }
+    for game-title[index] in root.favorite-game-titles : GameTile {
+        x: 64px + index * 440px;
+        y: 142px;
+        title: game-title;
+        subtitle: index < root.favorite-game-subtitles.length ? root.favorite-game-subtitles[index] : "";
+        show-title: index < root.favorite-game-show-titles.length ? root.favorite-game-show-titles[index] : true;
+        cover: index < root.favorite-game-covers.length ? root.favorite-game-covers[index] : @image-url("../assets/games/1/game-tile.jpg");
+        selected: root.focused && root.selected-section == 0 && root.favorite-game-selected-index == index;
+        activated => { root.open-game(root.favorite-game-indices[index]); }
+    }
+
+    Text { x: 64px; y: 500px; text: "Recently played Games"; color: #f4f7f5; font-size: 42px; font-weight: 800; }
+    if root.recent-game-titles.length == 0 : Text { x: 64px; y: 552px; text: "No recently played games yet.."; color: #929994; font-size: 18px; }
+    for game-title[index] in root.recent-game-titles : GameTile {
+        x: 64px + index * 440px;
+        y: 552px;
+        title: game-title;
+        subtitle: index < root.recent-game-subtitles.length ? root.recent-game-subtitles[index] : "";
+        show-title: index < root.recent-game-show-titles.length ? root.recent-game-show-titles[index] : true;
+        cover: index < root.recent-game-covers.length ? root.recent-game-covers[index] : @image-url("../assets/games/1/game-tile.jpg");
+        selected: root.focused && root.selected-section == 1 && root.recent-game-selected-index == index;
+        activated => { root.open-game(root.recent-game-indices[index]); }
+    }
+}

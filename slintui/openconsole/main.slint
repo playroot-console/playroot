@@ -1,0 +1,514 @@
+import { Globals } from "globals.slint";
+import { TopNavigation } from "components/TopNavigation.slint";
+import { HomeView } from "views/HomeView.slint";
+import { GamesView } from "views/GamesView.slint";
+import { GameDetailsView } from "views/GameDetailsView.slint";
+import { SettingsView } from "views/SettingsView.slint";
+import { SystemSettingsView } from "views/SystemSettingsView.slint";
+import { AboutView } from "views/AboutView.slint";
+import { BluetoothPairingView } from "views/BluetoothPairingView.slint";
+import { NetworkWifiView } from "views/NetworkWifiView.slint";
+import { KeyboardInputView } from "views/KeyboardInput.slint";
+import { ManageControllersView } from "views/ManageControllersView.slint";
+import { AddControllerTypeView } from "views/AddControllerTypeView.slint";
+import { ConfigureControllerView } from "views/ConfigureControllerView.slint";
+import { ControllerMappingView } from "views/ControllerMappingView.slint";
+import { NetworkOptionsView } from "views/NetworkOptionsView.slint";
+
+export component Demo inherits Window {
+    preferred-width: 1920px;
+    preferred-height: 1080px;
+    min-width: 960px;
+    min-height: 540px;
+    minimized: false;
+    maximized: true;
+    background: #292929;
+    forward-focus: keyboard-scope;
+
+    in-out property <color> background-color: #292929;
+    in-out property <int> screen: 1;
+    in-out property <int> focus-region: 1;
+    full-screen: true;
+    in-out property <int> nav-selection: 1;
+    in-out property <int> selected-game: 0;
+    in-out property <int> game-count: 4;
+    in-out property <[string]> game-titles: ["Pirate", "Pizza Delivery", "Soko Bloom", "Hogbound"];
+    in-out property <[string]> game-subtitles: ["Puzzle | Installed", "Strategy | Installed", "Puzzle | Installed", "Platformer | Installed"];
+    in-out property <[string]> game-descriptions: ["Embark on a thrilling pirate adventure, solving puzzles and uncovering hidden treasures.", "Deliver pizzas efficiently while managing obstacles and time constraints.", "Solve challenging puzzles in a vibrant and colorful world.", "Navigate through tricky platforming levels and overcome various challenges."];
+    in-out property <[string]> game-developers: ["PlayRoot", "PlayRoot", "PlayRoot", "PlayRoot"];
+    in-out property <[bool]> game-show-titles: [false, false, false, false];
+    in-out property <image> selected-game-cover;
+    in-out property <bool> selected-game-cover-loading: false;
+    in-out property <[image]> game-screenshots: [];
+    in-out property <bool> game-screenshots-loading: false;
+    in-out property <bool> game-favorite: false;
+    in-out property <int> selected-screenshot-index: 0;
+        in-out property <bool> screenshot-popup-open: false;
+    in-out property <[string]> new-game-titles: ["Pizza Delivery", "Soko Bloom", "Hogbound", "Pirate"];
+    in-out property <[string]> new-game-subtitles: ["Strategy | Installed", "Puzzle | Installed", "Platformer | Installed", "Puzzle | Installed"];
+    in-out property <[bool]> new-game-show-titles: [false, false, false, false];
+    in-out property <[image]> new-game-covers: [];
+    in-out property <[int]> new-game-indices: [1, 2, 3, 0];
+    in-out property <int> new-game-selected-index: 0;
+    in-out property <int> games-selected-section: 0;
+    in-out property <[string]> top-game-titles: ["Pirate", "Soko Bloom", "Hogbound"];
+    in-out property <[string]> top-game-subtitles: ["Puzzle | Installed", "Puzzle | Installed", "Platformer | Installed"];
+    in-out property <[bool]> top-game-show-titles: [false, false, false];
+    in-out property <[image]> top-game-covers: [];
+    in-out property <[int]> top-game-indices: [0, 2, 3];
+    in-out property <int> top-game-selected-index: 0;
+    in-out property <[string]> all-game-titles: ["Soko Bloom", "Hogbound", "Pirate", "Pizza Delivery", "Soko Bloom", "Hogbound", "Pirate"];
+    in-out property <[string]> all-game-subtitles: ["Puzzle | Installed", "Platformer | Installed", "Puzzle | Installed", "Strategy | Installed", "Puzzle | Installed", "Platformer | Installed", "Puzzle | Installed"];
+    in-out property <[bool]> all-game-show-titles: [false, false, false, false, false, false, false];
+    in-out property <[image]> all-game-covers: [];
+    in-out property <[int]> all-game-indices: [2, 3, 0, 1, 2, 3, 0];
+    in-out property <int> all-game-selected-index: 0;
+    in-out property <[string]> favorite-game-titles: [];
+    in-out property <[string]> favorite-game-subtitles: [];
+    in-out property <[bool]> favorite-game-show-titles: [];
+    in-out property <[image]> favorite-game-covers: [];
+    in-out property <[int]> favorite-game-indices: [];
+    in-out property <int> favorite-game-selected-index: 0;
+    in-out property <[string]> recent-game-titles: [];
+    in-out property <[string]> recent-game-subtitles: [];
+    in-out property <[bool]> recent-game-show-titles: [];
+    in-out property <[image]> recent-game-covers: [];
+    in-out property <[int]> recent-game-indices: [];
+    in-out property <int> recent-game-selected-index: 0;
+    in-out property <int> home-selected-section: 0;
+    in property <bool> development-build: false;
+    in-out property <int> selected-setting: 0;
+    in-out property <string> add-controller-status: "";
+    in-out property <int> system-setting: 0;
+    in-out property <[string]> controller-item-names: [];
+    in-out property <bool> wifi-enabled: false;
+    in-out property <bool> bluetooth-enabled: false;
+    in-out property <string> ethernet-status-title: "Disconnected";
+    in-out property <string> ethernet-status-detail: "No Ethernet link detected.";
+    in-out property <string> wifi-status-title: "Disabled";
+    in-out property <string> wifi-status-detail: "Enable Wi-Fi to scan and connect to a network.";
+    in-out property <string> system-settings-status: "";
+    in-out property <string> wifi-network-status: "";
+    in-out property <string> wifi-network-placeholder-text: "";
+    in-out property <[string]> wifi-network-names: [];
+    in-out property <[bool]> wifi-network-secured: [];
+    in-out property <[int]> wifi-network-states: [];
+    in-out property <int> wifi-network-window-start: 0;
+    in-out property <int> wifi-network-visible-selected-index: 0;
+    in-out property <int> wifi-network-selected-index: 0;
+    in-out property <int> wifi-network-action: 0;
+    in-out property <string> wifi-password-network-name: "";
+    in-out property <string> wifi-password-input-text: "";
+    in-out property <string> wifi-password-status: "";
+    in-out property <string> wifi-password-visibility-label: "SHOW";
+    in-out property <string> wifi-password-key-selected: "";
+    in-out property <int> wifi-password-keyboard-mode: 0;
+    in-out property <int> wifi-password-action: 0;
+    in-out property <string> bluetooth-pairing-status: "";
+    in-out property <string> bluetooth-device-list-text: "";
+    in-out property <string> bluetooth-debug-text: "Bluetooth scan details will appear here.";
+    in-out property <[string]> bluetooth-device-names: [];
+    in-out property <int> bluetooth-device-selected-index: 0;
+    in-out property <bool> bluetooth-device-selected-paired: false;
+    in-out property <int> bluetooth-device-action: 0;
+    in-out property <bool> bluetooth-pairing-intro: false;
+    in-out property <bool> bluetooth-scan-running: false;
+    in-out property <bool> bluetooth-link-light-off-visible: false;
+    in-out property <string> paired-bluetooth-address: "";
+    in-out property <int> selected-detail-control: 0;
+    in-out property <int> controller-type-selection: 0;
+    in-out property <bool> game-launching: false;
+    in-out property <string> launch-status: "";
+    in-out property <string> controller-list-text: "No controllers added yet.";
+    in-out property <string> controller-manager-status: "";
+    in-out property <int> controller-selected-index: 0;
+    in-out property <int> controller-manage-action: 0;
+    in-out property <string> controller-config-title: "";
+    in-out property <string> controller-config-progress: "0/0";
+    in-out property <string> controller-config-mappings: "";
+    in-out property <string> controller-config-instruction: "";
+    in-out property <string> controller-config-last-input: "";
+    in-out property <int> controller-config-art-stage: 0;
+    in-out property <string> controller-config-artwork-set: "snes";
+    in-out property <string> controller-config-current-button: "";
+    in-out property <string> controller-config-overlay-name: "";
+    in-out property <int> controller-config-progress-percent: 0;
+    in-out property <string> controller-device-list-text: "";
+    in-out property <[string]> controller-device-names: [];
+    in-out property <bool> controller-device-selection: false;
+    in-out property <int> controller-device-selected-index: 0;
+    in-out property <bool> controller-capture-armed: false;
+    in-out property <bool> controller-config-complete: false;
+    in-out property <int> controller-final-selection: 0;
+    in-out property <int> network-options-selected-index: 0;
+    in-out property <int> wifi-setup-return-screen: 12;
+
+    callback launch-game(int);
+    callback restart-system();
+    callback select_game(int);
+    callback refresh-controllers();
+    callback controller-select-prev();
+    callback controller-select-next();
+    callback remove-selected-controller();
+    callback start-controller-setup(int);
+    callback controller-device-select-prev();
+    callback controller-device-select-next();
+    callback activate-controller-device-selection();
+    callback cancel-controller-setup();
+    callback activate-controller-final-selection();
+    callback scan_bluetooth_devices();
+    callback pair_or_continue_bluetooth_device();
+    callback unpair_bluetooth_device();
+    callback cancel_bluetooth_pairing();
+    callback select_bluetooth_device(int);
+    callback toggle_wifi();
+    callback open_wifi_setup();
+    callback scan_wifi_networks();
+    callback select_wifi_network(int);
+    callback activate_wifi_network();
+    callback cancel_wifi_setup();
+    callback wifi_password_append_selected();
+    callback wifi_password_select_key(string);
+    callback wifi_password_select_mode(int);
+    callback wifi_password_append_text(string);
+    callback wifi_password_backspace();
+    callback wifi_password_clear();
+    callback wifi_password_toggle_visibility();
+    callback wifi_password_connect();
+    callback wifi_password_cancel();
+    callback toggle_bluetooth();
+    callback toggle_game_favorite();
+    callback select_game_screenshot(int);
+
+    keyboard-scope := FocusScope {
+        width: parent.width;
+        height: parent.height;
+
+        if root.screen == 0 : HomeView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            focused: root.focus-region == 1;
+            favorite-game-titles: root.favorite-game-titles;
+            favorite-game-subtitles: root.favorite-game-subtitles;
+            favorite-game-show-titles: root.favorite-game-show-titles;
+            favorite-game-covers: root.favorite-game-covers;
+            favorite-game-indices: root.favorite-game-indices;
+            favorite-game-selected-index: root.favorite-game-selected-index;
+            recent-game-titles: root.recent-game-titles;
+            recent-game-subtitles: root.recent-game-subtitles;
+            recent-game-show-titles: root.recent-game-show-titles;
+            recent-game-covers: root.recent-game-covers;
+            recent-game-indices: root.recent-game-indices;
+            recent-game-selected-index: root.recent-game-selected-index;
+            selected-section: root.home-selected-section;
+            open-game(index) => { root.select_game(index); root.screen = 3; root.focus-region = 1; root.selected-detail-control = 0; }
+        }
+        if root.screen == 1 : GamesView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            selected-game: root.selected-game;
+            focused: root.focus-region == 1;
+            new-game-titles: root.new-game-titles;
+            new-game-subtitles: root.new-game-subtitles;
+            new-game-show-titles: root.new-game-show-titles;
+            new-game-covers: root.new-game-covers;
+            new-game-indices: root.new-game-indices;
+            new-game-selected-index: root.new-game-selected-index;
+            selected-section: root.games-selected-section;
+            top-game-titles: root.top-game-titles;
+            top-game-subtitles: root.top-game-subtitles;
+            top-game-show-titles: root.top-game-show-titles;
+            top-game-covers: root.top-game-covers;
+            top-game-indices: root.top-game-indices;
+            top-game-selected-index: root.top-game-selected-index;
+            all-game-titles: root.all-game-titles;
+            all-game-subtitles: root.all-game-subtitles;
+            all-game-show-titles: root.all-game-show-titles;
+            all-game-covers: root.all-game-covers;
+            all-game-indices: root.all-game-indices;
+            all-game-selected-index: root.all-game-selected-index;
+            open-game(section, index) => {
+                if section == 0 && index < root.new-game-indices.length {
+                    root.select_game(root.new-game-indices[index]);
+                    root.games-selected-section = 0;
+                    root.new-game-selected-index = index;
+                    root.screen = 3;
+                    root.focus-region = 1;
+                        root.selected-detail-control = 1;
+                        root.screenshot-popup-open = false;
+                } else if section == 1 && index < root.top-game-indices.length {
+                    root.select_game(root.top-game-indices[index]);
+                    root.games-selected-section = 1;
+                    root.top-game-selected-index = index;
+                    root.screen = 3;
+                    root.focus-region = 1;
+                        root.selected-detail-control = 1;
+                        root.screenshot-popup-open = false;
+                } else if section == 2 && index < root.all-game-indices.length {
+                    root.select_game(root.all-game-indices[index]);
+                    root.games-selected-section = 2;
+                    root.all-game-selected-index = index;
+                    root.screen = 3;
+                    root.focus-region = 1;
+                        root.selected-detail-control = 1;
+                        root.screenshot-popup-open = false;
+                }
+            }
+        }
+        if root.screen == 2 : SettingsView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            selected-setting: root.selected-setting;
+            focused: root.focus-region == 1;
+        }
+        if root.screen == 8 : BluetoothPairingView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            status-text: root.bluetooth-pairing-status;
+            device-list-text: root.bluetooth-device-list-text;
+            debug-text: root.bluetooth-debug-text;
+            device-names: root.bluetooth-device-names;
+            selected-index: root.bluetooth-device-selected-index;
+            selected-paired: root.bluetooth-device-selected-paired;
+            selected-action: root.bluetooth-device-action;
+            show-intro: root.bluetooth-pairing-intro;
+            scan-running: root.bluetooth-scan-running;
+            light-off-visible: root.bluetooth-link-light-off-visible;
+            focused: root.focus-region == 1;
+            scan_devices() => { root.scan_bluetooth_devices(); }
+            pair_or_continue() => { root.pair_or_continue_bluetooth_device(); }
+            unpair_device() => { root.unpair_bluetooth_device(); }
+            cancel() => { root.cancel_bluetooth_pairing(); }
+            select_device(index) => { root.select_bluetooth_device(index); }
+        }
+        if root.screen == 9 : NetworkWifiView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            status-text: root.wifi-network-status;
+            placeholder-text: root.wifi-network-placeholder-text;
+            network-names: root.wifi-network-names;
+            network-secured: root.wifi-network-secured;
+            network-states: root.wifi-network-states;
+            base-index: root.wifi-network-window-start;
+            selected-index: root.wifi-network-visible-selected-index;
+            selected-action: root.wifi-network-action;
+            focused: root.focus-region == 1;
+            scan_networks() => { root.scan_wifi_networks(); }
+            select_network(index) => { root.select_wifi_network(index); }
+            activate_network() => { root.activate_wifi_network(); }
+            cancel() => { root.cancel_wifi_setup(); }
+        }
+        if root.screen == 10 : KeyboardInputView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            title: "Wi-Fi Password";
+            subtitle: root.wifi-password-network-name != "" ? "Enter the Wi-Fi password for: " + root.wifi-password-network-name : "Enter the Wi-Fi password";
+            input-text: root.wifi-password-input-text;
+            status-text: root.wifi-password-status;
+            visibility-label: root.wifi-password-visibility-label;
+            keyboard-mode: root.wifi-password-keyboard-mode;
+            selected-action: root.wifi-password-action;
+            focused: root.focus-region == 1;
+            key-selected: root.wifi-password-key-selected;
+            select_key(key) => { root.wifi_password_select_key(key); }
+            select_mode(mode) => { root.wifi_password_select_mode(mode); }
+            append_selected() => { root.wifi_password_append_selected(); }
+            toggle_visibility() => { root.wifi_password_toggle_visibility(); }
+            connect() => { root.wifi_password_connect(); }
+        }
+        if root.screen == 7 : SystemSettingsView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            selected-index: root.system-setting;
+            focused: root.focus-region == 1;
+            wifi-enabled: root.wifi-enabled;
+            bluetooth-enabled: root.bluetooth-enabled;  
+            status-text: root.system-settings-status;
+            toggle_wifi() => { root.toggle_wifi(); } 
+            toggle_bluetooth() => { root.toggle_bluetooth(); }
+        }
+        if root.screen == 11 : AboutView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            version: "0.1.0";
+            go_back => { root.screen = 2; root.focus-region = 1; root.selected-setting = 4; }
+        }
+        if root.screen == 3 : GameDetailsView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            selected-game: root.selected-game;
+            selected-control: root.selected-detail-control;
+            focused: root.focus-region == 1;
+            launching: root.game-launching;
+            launch-status: root.launch-status;
+            game-titles: root.game-titles;
+            game-subtitles: root.game-subtitles;
+            game-developer: root.selected-game < root.game-developers.length ? root.game-developers[root.selected-game] : "";
+            game-description: root.selected-game < root.game-descriptions.length ? root.game-descriptions[root.selected-game] : "";
+            game-cover: root.selected-game-cover;
+            game-cover-loading: root.selected-game-cover-loading;
+            game-screenshots: root.game-screenshots;
+            game-screenshots-loading: root.game-screenshots-loading;
+            game-favorite: root.game-favorite;
+            selected-screenshot-index: root.selected-screenshot-index;
+                screenshot-popup-open: root.screenshot-popup-open;
+            go-back => { root.screen = 1; root.focus-region = 1; root.launch-status = ""; }
+            play-now => { root.launch-game(root.selected-game); }
+            toggle_favorite() => { root.toggle_game_favorite(); }
+            select_screenshot(index) => { root.select_game_screenshot(index); }
+                dismiss_screenshot_popup() => { root.screenshot-popup-open = false; }
+        }
+        if root.screen == 4 : ManageControllersView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            focused: root.focus-region == 1;
+            controller-item-names: root.controller-item-names;
+            status-text: root.controller-manager-status;
+            selected-controller: root.controller-selected-index;
+            selected-action: root.controller-manage-action;
+        }
+        if root.screen == 5 : AddControllerTypeView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            focused: root.focus-region == 1;
+            selected-type: root.controller-type-selection;
+            status-text: root.add-controller-status;
+            select_type(index) => {
+                root.controller-type-selection = index;
+                if (index == 2) {
+                    if (!root.bluetooth-enabled) {
+                        root.add-controller-status = "Bluetooth is disabled. Enable it in System first.";
+                    } else {
+                        root.add-controller-status = "";
+                        root.bluetooth-pairing-status = "Scanning for DualSense controllers...";
+                        root.bluetooth-device-selected-index = 0;
+                        root.bluetooth-device-selected-paired = false;
+                        root.screen = 8;
+                        root.scan_bluetooth_devices();
+                    }
+                } else {
+                    root.add-controller-status = "";
+                }
+            }
+        }
+        if root.screen == 6 && root.controller-device-selection : ConfigureControllerView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            focused: root.focus-region == 1;
+            controller-title: root.controller-config-title;
+            progress-text: root.controller-config-progress;
+            mapping-lines: root.controller-config-mappings;
+            device-list-text: root.controller-device-list-text;
+            device-names: root.controller-device-names;
+            selected-device: root.controller-device-selected-index;
+            instruction-text: root.controller-config-instruction;
+            last-input-text: root.controller-config-last-input;
+            device-selection: root.controller-device-selection;
+            setup-complete: root.controller-config-complete;
+            final-selection: root.controller-final-selection;
+        }
+        if root.screen == 6 && !root.controller-device-selection : ControllerMappingView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            focused: root.focus-region == 1;
+            controller-title: root.controller-config-title;
+            progress-text: root.controller-config-progress;
+            instruction-text: root.controller-config-instruction;
+            last-input-text: root.controller-config-last-input;
+            art-stage: root.controller-config-art-stage;
+            artwork-set: root.controller-config-artwork-set;
+            current-button-text: root.controller-config-current-button;
+            overlay-name: root.controller-config-overlay-name;
+            progress-percent: root.controller-config-progress-percent;
+        }
+ 
+        if root.screen == 12 : NetworkOptionsView {
+            y: 86px;
+            width: parent.width;
+            height: parent.height - 86px;
+            focused: root.focus-region == 1;
+            selected-index: root.network-options-selected-index;
+            ethernet-status-title: root.ethernet-status-title;
+            ethernet-status-detail: root.ethernet-status-detail;
+            wifi-status-title: root.wifi-status-title;
+            wifi-status-detail: root.wifi-status-detail;
+            open_wifi_setup() => { root.open_wifi_setup(); }
+        }
+
+        TopNavigation {
+            x: 0px;
+            y: 0px;
+            width: parent.width;
+            selected-index: root.nav-selection;
+            focused: root.focus-region == 0;
+            navigate(index) => { root.screen = index; root.nav-selection = index; root.focus-region = 0; }
+        }
+
+        key-pressed(event) => {
+            if root.screen == 8 && root.focus-region == 1 {
+                if event.text == Key.Return || event.text == " " {
+                    if root.bluetooth-pairing-intro || root.bluetooth-device-names.length == 0 || root.bluetooth-device-action == 0 {
+                        if root.bluetooth-pairing-intro || root.bluetooth-device-names.length == 0 {
+                            root.scan_bluetooth_devices();
+                        } else {
+                            root.pair_or_continue_bluetooth_device();
+                        }
+                    } else {
+                        root.pair_or_continue_bluetooth_device();
+                    }
+                    accept
+                } else if event.text == Key.Escape {
+                    root.cancel_bluetooth_pairing();
+                    accept
+                } else {
+                    reject
+                }
+            } else if root.screen == 10 && root.focus-region == 1 {
+                if event.text == Key.Backspace {
+                    root.wifi_password_backspace();
+                    accept
+                } else if event.text == Key.Return {
+                    if root.wifi-password-action == 0 {
+                        root.wifi_password_append_selected();
+                    } else if root.wifi-password-action == 1 {
+                        root.wifi_password_toggle_visibility();
+                    } else if root.wifi-password-action == 2 {
+                        root.wifi_password_select_mode(1);
+                    } else if root.wifi-password-action == 3 {
+                        root.wifi_password_select_mode(0);
+                    } else if root.wifi-password-action == 4 {
+                        root.wifi_password_select_mode(2);
+                    } else if root.wifi-password-action == 5 {
+                        root.wifi_password_connect();
+                    } else {
+                        root.wifi_password_cancel();
+                    }
+                    accept
+                } else if event.text == Key.Escape {
+                    root.wifi_password_cancel();
+                    accept
+                } else if event.text != "" {
+                    root.wifi_password_append_text(event.text);
+                    accept
+                } else {
+                    reject
+                }
+            } else {
+                reject
+            }
+        }
+    }
+}

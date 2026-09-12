@@ -1,0 +1,98 @@
+import { GameTile } from "../components/GameTile.slint";
+import { TopGameTile } from "../components/TopGameTile.slint";
+
+export component GamesView inherits Rectangle {
+    in property <int> selected-game: 0;
+    in property <bool> focused: false;
+
+    in property <[string]> new-game-titles;
+    in property <[string]> new-game-subtitles;
+    in property <[bool]> new-game-show-titles;
+    in property <[image]> new-game-covers;
+    in property <[int]> new-game-indices;
+    in property <int> new-game-selected-index: 0;
+    in property <int> selected-section: 0;
+
+    in property <[string]> top-game-titles;
+    in property <[string]> top-game-subtitles;
+    in property <[bool]> top-game-show-titles;
+    in property <[image]> top-game-covers;
+    in property <[int]> top-game-indices;
+    in property <int> top-game-selected-index: 0;
+
+    in property <[string]> all-game-titles;
+    in property <[string]> all-game-subtitles;
+    in property <[bool]> all-game-show-titles;
+    in property <[image]> all-game-covers;
+    in property <[int]> all-game-indices;
+    in property <int> all-game-selected-index: 0;
+
+    callback open-game(int, int);
+
+    background: #292929;
+    clip: true;
+
+    property <length> content-y-offset: root.selected-section == 2 ? 880px : 0px;
+
+    property <length> new-game-row-offset: root.new-game-titles.length == 0 ? 0px : (
+        root.new-game-selected-index * 440px < 64px + (root.new-game-titles.length - 1) * 440px + 410px - (root.width - 64px)
+            ? root.new-game-selected-index * 440px
+            : 64px + (root.new-game-titles.length - 1) * 440px + 410px - (root.width - 64px)
+    );
+    property <length> top-game-row-offset: root.top-game-titles.length == 0 ? 0px : (
+        root.top-game-selected-index * 700px < 50px + (root.top-game-titles.length - 1) * 700px + 670px - (root.width - 50px)
+            ? root.top-game-selected-index * 700px
+            : 50px + (root.top-game-titles.length - 1) * 700px + 670px - (root.width - 50px)
+    );
+    property <length> all-game-row-offset: root.all-game-titles.length == 0 ? 0px : (
+        root.all-game-selected-index * 440px < 64px + (root.all-game-titles.length - 1) * 440px + 410px - (root.width - 64px)
+            ? root.all-game-selected-index * 440px
+            : 64px + (root.all-game-titles.length - 1) * 440px + 410px - (root.width - 64px)
+    );
+
+    content := Rectangle {
+        x: 0px;
+        y: -root.content-y-offset;
+        width: parent.width;
+        height: 1400px;
+
+        animate y { duration: 220ms; easing: ease-in-out; }
+
+        Text { x: 64px; y: 68px; text: "New Games"; color: #f4f7f5; font-size: 42px; font-weight: 800; }
+        for game-title[index] in root.new-game-titles : GameTile {
+            x: 64px + index * 440px - root.new-game-row-offset;
+            y: 162px;
+            title: game-title;
+            subtitle: index < root.new-game-subtitles.length ? root.new-game-subtitles[index] : "";
+            show-title: index < root.new-game-show-titles.length ? root.new-game-show-titles[index] : true;
+            cover: index < root.new-game-covers.length ? root.new-game-covers[index] : @image-url("../assets/games/1/game-tile.jpg");
+            selected: root.focused && root.selected-section == 0 && root.new-game-selected-index == index;
+            animate x { duration: 180ms; easing: ease-in-out; }
+            activated => { root.open-game(0, index); }
+        }
+
+        Text { x: 64px; y: 450px; text: "Top Games"; color: #f4f7f5; font-size: 42px; font-weight: 800; }
+        for game-title[index] in root.top-game-titles : TopGameTile {
+            position: (index + 1);
+            x: 50px + index * 700px - root.top-game-row-offset;
+            y: 540px;
+            cover: index < root.top-game-covers.length ? root.top-game-covers[index] : @image-url("../assets/games/1/game-top.jpg");
+            selected: root.focused && root.selected-section == 1 && root.top-game-selected-index == index;
+            animate x { duration: 180ms; easing: ease-in-out; }
+            activated => { root.open-game(1, index); }
+        }
+
+        Text { x: 64px; y: 1000px; text: "All Games"; color: #f4f7f5; font-size: 42px; font-weight: 800; }
+        for game-title[index] in root.all-game-titles : GameTile {
+            x: 64px + index * 440px - root.all-game-row-offset;
+            y: 1100px;
+            title: game-title;
+            subtitle: index < root.all-game-subtitles.length ? root.all-game-subtitles[index] : "";
+            show-title: index < root.all-game-show-titles.length ? root.all-game-show-titles[index] : true;
+            cover: index < root.all-game-covers.length ? root.all-game-covers[index] : @image-url("../assets/games/1/game-tile.jpg");
+            selected: root.focused && root.selected-section == 2 && root.all-game-selected-index == index;
+            animate x { duration: 180ms; easing: ease-in-out; }
+            activated => { root.open-game(2, index); }
+        }
+    }
+}

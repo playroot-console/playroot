@@ -1,0 +1,288 @@
+
+export component KeyboardInputView inherits Rectangle {
+    in property <string> title: "";
+    in property <string> subtitle: "";
+    in property <string> input-text: "";
+    in property <string> status-text: "";
+    in property <string> visibility-label: "SHOW";
+    in property <int> selected-action: 0;
+    in property <int> keyboard-mode: 0;
+    in property <bool> focused: false;
+    in-out property <string> key-selected: "";
+    callback select_key(string);
+    callback select_mode(int);
+    callback append_selected();
+    callback toggle_visibility();
+    callback connect();
+
+    in property <[[string]]> regular-keys: [["Space", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "Delete"],
+                                        ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+                                        ["z", "x", "c", "v", "b", "n", "m"]];
+    in property <[[string]]> capital-keys: [["Space", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "Delete"],
+                                        ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+                                        ["Z", "X", "C", "V", "B", "N", "M"]];
+    in property <[[string]]> specific-keys: [["Space", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Delete"],
+                                        ["-", "/", ":", ";", "(", ")", "$", "&", "@", "\\"],
+                                        [".", ",", "?", "!", "'", "#"]];
+
+    in property <bool> password-visible: false;
+
+    background: #0b0c10;
+
+    // title
+    Text {
+        y: 72px;
+        width: parent.width;
+        text: root.title != "" ? root.title : "Wi-Fi Password";
+        color: #f4f7f5;
+        font-size: 42px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+    // subtitle
+    Text {
+        y: 142px;
+        width: parent.width;
+        text: root.subtitle != "" ? root.subtitle : "Enter the Wi-Fi password for the network: WiFi Network Name";
+        color: #666666;
+        font-size: 24px;
+        font-weight: 400;
+        horizontal-alignment: center;
+    }   
+
+    // input
+    Rectangle {
+        x: parent.width / 2 - 500px;
+        y: 200px;
+        width: 1000px;
+        height: 60px;
+        background: #15181d;
+        border-radius: 20px;
+        Text {
+            x: 20px;
+            width: parent.width - 180px;
+            height: parent.height;
+            text: root.input-text;
+            color: #eef2ef;
+            font-size: 24px;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+
+        Rectangle {
+            x: 790px;
+            y: 8px;
+            width: 180px;
+            height: 44px;
+            background: root.focused && root.selected-action == 1 ? #ffffff : #1b2027;
+            border-radius: 8px;
+            Text {
+                width: parent.width;
+                height: parent.height;
+                text: root.visibility-label;
+                color: root.focused && root.selected-action == 1 ? #000000 : #eef2ef;
+                font-size: 18px;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+            TouchArea { clicked => { root.toggle_visibility(); } }
+        }
+    }
+
+    // Keyboard view - small characters 
+    Rectangle {
+        x: parent.width / 2 - 800px;
+        y: 300px;
+        width: 1600px;
+        height: 360px;
+        background: #15181d;
+        border-radius: 20px;    
+        
+        // regular keys
+        if root.keyboard-mode == 0 : Rectangle {
+            for  row_index in root.regular-keys.length : Rectangle {
+                for key_index in root.regular-keys[row_index].length : Rectangle {
+                    
+                    // calculate centered position for each key based on its index and row
+                    x: (parent.width / 2 ) - (root.regular-keys[row_index].length * 110px / 2) + key_index * 110px;
+                    y: 20px + row_index * 110px;
+                    width: 100px;
+                    height: 100px;
+                    background: root.focused && root.selected-action == 0 && root.key-selected == root.regular-keys[row_index][key_index] ? #ffffff : #1b2027;
+                    border-radius: 8px;
+                    Text {
+                        width: parent.width;
+                        height: parent.height;
+                        text: root.regular-keys[row_index][key_index]; // 0-9
+                        color: root.focused && root.selected-action == 0 && root.key-selected == root.regular-keys[row_index][key_index] ? #000000 : #eef2ef;
+                        font-size: 24px;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
+                    TouchArea {
+                        clicked => {
+                            root.key-selected = root.regular-keys[row_index][key_index];
+                            root.select_key(root.regular-keys[row_index][key_index]);
+                            root.append_selected();
+                        }
+                    }
+                }
+            }
+        }
+
+        // capital keys
+        if root.keyboard-mode == 1 : Rectangle {
+            for  row_index in root.capital-keys.length : Rectangle {
+                for key_index in root.capital-keys[row_index].length : Rectangle {
+                    // calculate centered position for each key based on its index and row
+                    x: (parent.width / 2 ) - (root.capital-keys[row_index].length * 110px / 2) + key_index * 110px;
+                    y: 20px + row_index * 110px;
+                    width: 100px;
+                    height: 100px;
+                    background: root.focused && root.selected-action == 0 && root.key-selected == root.capital-keys[row_index][key_index] ? #ffffff : #1b2027;
+                    border-radius: 8px;
+                    Text {
+                        width: parent.width;
+                        height: parent.height;
+                        text: root.capital-keys[row_index][key_index]; // A-Z
+                        color: root.focused && root.selected-action == 0 && root.key-selected == root.capital-keys[row_index][key_index] ? #000000 : #eef2ef;
+                        font-size: 24px;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
+                    TouchArea {
+                        clicked => {
+                            root.key-selected = root.capital-keys[row_index][key_index];
+                            root.select_key(root.capital-keys[row_index][key_index]);
+                            root.append_selected();
+                        }
+                    }
+                }
+            }
+        }
+
+        // numeric and special character keys
+        if root.keyboard-mode == 2 : Rectangle {
+            for  row_index in root.specific-keys.length : Rectangle {
+                for key_index in root.specific-keys[row_index].length : Rectangle {
+                    // calculate centered position for each key based on its index and row
+                    x: (parent.width / 2 ) - (root.specific-keys[row_index].length * 110px / 2) + key_index * 110px;
+                    y: 20px + row_index * 110px;
+                    width: 100px;
+                    height: 100px;
+                    background: root.focused && root.selected-action == 0 && root.key-selected == root.specific-keys[row_index][key_index] ? #ffffff : #1b2027;
+                    border-radius: 8px;
+                    Text {
+                        width: parent.width;
+                        height: parent.height;
+                        text: root.specific-keys[row_index][key_index]; // special characters
+                        color: root.focused && root.selected-action == 0 && root.key-selected == root.specific-keys[row_index][key_index] ? #000000 : #eef2ef;
+                        font-size: 24px;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
+                    TouchArea {
+                        clicked => {
+                            root.key-selected = root.specific-keys[row_index][key_index];
+                            root.select_key(root.specific-keys[row_index][key_index]);
+                            root.append_selected();
+                        }
+                    }
+                }
+            }
+        }
+    }
+ 
+    // keyboard mode buttons
+
+    Rectangle {
+        x: parent.width / 2 - 800px;
+        y: 680px;
+        width: 1600px;
+        height: 100px;
+        border-radius: 20px;
+
+        Rectangle {
+            x: parent.width / 2 - 300px;
+            y: 20px;
+            width: 600px;
+            height: 52px;
+
+            Rectangle {
+                x: 0px;
+                y: 0px;
+                width: 200px;
+                height: 52px;
+                background: root.focused && root.selected-action == 2 ? #ffffff : root.keyboard-mode == 1 ? #5b5b5b : #15181d;
+                border-radius: 8px;
+                Text {
+                    width: parent.width;
+                    height: parent.height;
+                    text: "ABC";
+                    color: root.focused && root.selected-action == 2 ? #000000 : root.keyboard-mode == 1 ? #a6a6a6 : #eef2ef;
+                    font-size: 24px;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+                TouchArea { clicked => { root.select_mode(1); } }
+            }
+            Rectangle {
+                x: 200px;
+                y: 0px;
+                width: 200px;
+                height: 52px;
+                background: root.focused && root.selected-action == 3 ? #ffffff : root.keyboard-mode == 0 ? #5b5b5b : #15181d;
+                border-radius: 8px;
+                Text {
+                    width: parent.width;
+                    height: parent.height;
+                    text: "abc";
+                    color: root.focused && root.selected-action == 3 ? #000000 : root.keyboard-mode == 0 ? #a6a6a6 : #eef2ef;
+                    font-size: 24px;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+                TouchArea { clicked => { root.select_mode(0); } }
+            }
+            Rectangle {
+                x: 400px;
+                y: 0px;
+                width: 200px;
+                height: 52px;
+                background: root.focused && root.selected-action == 4 ? #ffffff : root.keyboard-mode == 2 ? #5b5b5b : #15181d;
+                border-radius: 8px;
+                Text {
+                    width: parent.width;
+                    height: parent.height;
+                    text: "123 / #+!";
+                    color: root.focused && root.selected-action == 4 ? #000000 : root.keyboard-mode == 2 ? #a6a6a6 : #eef2ef;
+                    font-size: 24px;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+                TouchArea { clicked => { root.select_mode(2); } }
+            }
+        }
+    }
+
+    Rectangle {
+        x: parent.width / 2 - 150px;
+        y: 824px;
+        width: 300px;
+        height: 60px;
+        background: root.focused && root.selected-action == 5 ? #ffffff : #1b2027;
+        border-radius: 30px;
+        Text {
+            width: parent.width;
+            height: parent.height;
+            text: "CONNECT & SAVE";
+            color: root.focused && root.selected-action == 5 ? #000000 : #eef2ef;
+            font-size: 24px;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+        TouchArea { clicked => { root.connect(); } }
+    }
+
+}

@@ -1,0 +1,19 @@
+import { Globals } from "../globals.slint";
+
+export component FavIcon inherits Rectangle {
+    in property <image> icon;
+    in property <bool> selected: false;
+    callback activated();
+
+    in property <bool> isFavorite: false;
+
+    width: 70px;
+    height: 70px; 
+    background: transparent;
+    border-width: root.selected ? 6px : 0px;
+    border-color: #fff;
+    
+    Image {x:0px; y:0px; width: 70px; height: 70px; source: root.isFavorite ? @image-url("../assets/fav_filled.png") : @image-url("../assets/fav.png"); image-fit: ImageFit.cover;   }
+
+    TouchArea { clicked => { root.activated(); } }
+}

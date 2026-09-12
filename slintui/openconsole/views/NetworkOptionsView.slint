@@ -1,0 +1,75 @@
+export component NetworkOptionsView inherits Rectangle {
+    in property <int> selected-index;
+    in property <bool> focused: false;  
+    in property <string> ethernet-status-title: "Disconnected"; 
+    in property <string> ethernet-status-detail: "No network cable is connected.";
+    in property <string> wifi-status-title: "Disconnected"; 
+    in property <string> wifi-status-detail: "No Wi-Fi network is connected.";
+    callback open_wifi_setup();
+
+    in property <length> item-spacing: 20px;
+    in property <length> item-height: 120px;
+    in property <length> item-width: 600px;
+    in property <length> item-radius: 30px;
+    in property <length> start-y: 160px;
+
+    //callback toggle_wifi(); 
+    //callback toggle_bluetooth();
+
+    background: #292929;
+
+
+    Text {
+        y: 72px;
+        width: parent.width;
+        text: "Network";
+        color: #f4f7f5;
+        font-size: 42px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+
+    // Network Cable
+    Rectangle {
+        x: parent.width / 2 - root.item-width / 2;
+        y: root.start-y;
+        visible: true;
+        width: root.item-width;
+        height: root.item-height; 
+        border-radius: 30px;
+        clip: false;
+
+        background: root.focused && root.selected-index == 0 ? #ffffff : #15181d;
+
+        Text { x: 28px; y: 32px; text: "Network Cable"; color: root.focused && root.selected-index == 0 ? #000000 : #eef2ef; font-size: 20px; font-weight: 700; }
+        Text { x: parent.width - 150px; y: 28px; text: root.ethernet-status-title; color: root.ethernet-status-title == "Connected" ? #1db954 : #8f9993; font-size: 18px; font-weight: 700; horizontal-alignment: right; }
+        Text { x: 28px; y: 60px; text: root.ethernet-status-detail; color: root.focused && root.selected-index == 0 ? #8f9993 : #5a5a5a; font-size: 13px; width: parent.width - 256px; wrap: word-wrap; }
+        
+        TouchArea { clicked => { } }
+
+    }
+
+    // Wi-Fi
+    Rectangle {
+        x: parent.width / 2 - root.item-width / 2;
+        y: root.start-y + root.item-height + 20px;
+        visible: true;
+        width: root.item-width;
+        height: root.item-height; 
+        border-radius: 30px;
+        clip: false;
+
+        background: root.focused && root.selected-index == 1 ? #ffffff : #15181d;
+
+        Text { x: 28px; y: 32px; text: "Wi-Fi"; color: root.focused && root.selected-index == 1 ? #000000 : #eef2ef; font-size: 20px; font-weight: 700; }
+        Text { x: parent.width - 150px; y: 28px; text: root.wifi-status-title; color: (root.wifi-status-title == "Connected" || root.wifi-status-title == "Configured") ? #1db954 : #8f9993; font-size: 18px; font-weight: 700; horizontal-alignment: right; }
+        Text { x: 28px; y: 60px; text: root.wifi-status-detail; color: (root.wifi-status-title == "Connected" || root.wifi-status-title == "Configured") ? #1db954 : #5a5a5a; font-size: 13px; width: parent.width - 256px; wrap: word-wrap; }
+        
+        TouchArea { clicked => { root.open_wifi_setup(); } }
+
+    }
+ 
+    
+    
+}

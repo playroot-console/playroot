@@ -1,0 +1,26 @@
+import { Globals } from "../globals.slint";
+
+export component GameTile inherits Rectangle {
+    in property <string> title;
+    in property <string> subtitle;
+    in property <image> cover;
+    in property <bool> selected: false;
+    in property <bool> show-title: true;
+    callback activated();
+
+    width: 410px;
+    height: 230px; 
+    background: Globals.background-color;
+    border-width: root.selected ? 6px : 0px;
+    border-color: #fff;
+    
+    // for testing @image-url("../assets/games/1/game.png");
+    // for production root.cover;  root.title;
+    Image {x:6px; y:6px; width: 398px; height: 218px; source: root.cover; image-fit: ImageFit.cover;   }
+    if root.show-title : Rectangle {
+        background: transparent;
+        Image {x:6px; y: 146px; width: 398px; height: 78px; source:  @image-url("../assets/overlay.png"); image-fit: ImageFit.cover;  }
+        Text { y: 160px; width: 360px; height: 60px; font-size: 26px; text: root.title;  color: #fff;  overflow: elide; horizontal-alignment: right; vertical-alignment: center; }
+    }
+    TouchArea { clicked => { root.activated(); } }
+}

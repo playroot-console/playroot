@@ -1,0 +1,36 @@
+import { Globals } from "../globals.slint";
+
+export component TopNavigation inherits Rectangle {
+    in property <int> selected-index: 1;
+    in property <bool> focused: false; 
+    callback navigate(int);
+
+    height: 86px;
+    background: Globals.background-color;
+
+    Image { x: 40px; y: 25px; width: 285px; height: 70px; source: @image-url("../assets/logo_playroot4x.png"); image-fit: ImageFit.cover;  }
+    //Text { x: 58px; y: 25px; text: "OPEN//CONSOLE"; color: #e9f8ef; font-size: 23px; font-weight: 800; }
+
+    Rectangle {
+        x: 560px; y: 18px; width: 200px; height: 60px; border-radius: 30px;
+        background: root.selected-index == 0 ? (root.focused ? #fff : #8a8f96) : Globals.background-color;
+        border-width: root.focused && root.selected-index == 0 ? 2px : 0px; 
+        Text {x: 0px;  y: 2px; width: 200px; height: 60px; text: "Home"; font-size: 32px; font-weight: 800; color: root.selected-index == 0 ? #000 : #fff; horizontal-alignment: center; vertical-alignment: center; }
+        TouchArea { clicked => { root.navigate(0); } }
+    }
+    Rectangle {
+        x: 860px; y: 18px; width: 200px; height: 60px; border-radius: 30px;
+        background: root.selected-index == 1 ? (root.focused ? #fff : #8a8f96) : Globals.background-color;
+        border-width: root.focused && root.selected-index == 1 ? 2px : 0px; 
+        Text {x: 0px;  y: 2px; width: 200px; height: 60px; text: "Games"; font-size: 32px; font-weight: 800; color: root.selected-index == 1 ? #000 : #fff; horizontal-alignment: center; vertical-alignment: center; }
+        TouchArea { clicked => { root.navigate(1); } }
+    }
+    Rectangle {
+        x: 1160px; y: 18px; width: 200px; height: 60px; border-radius: 30px;
+        background: root.selected-index == 2 ? (root.focused ? #fff : #8a8f96) : Globals.background-color;
+        border-width: root.focused && root.selected-index == 2 ? 2px : 0px; 
+        Text {x: 0px;  y: 2px; width: 200px; height: 60px; text: "Settings"; font-size: 32px; font-weight: 800; color: root.selected-index == 2 ? #000 : #fff; horizontal-alignment: center; vertical-alignment: center; }
+        TouchArea { clicked => { root.navigate(2); } }
+    }
+
+  }

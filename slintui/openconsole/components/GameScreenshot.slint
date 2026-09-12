@@ -1,0 +1,18 @@
+import { Globals } from "../globals.slint";
+
+export component GameTile inherits Rectangle {
+    in property <image> cover;
+    in property <bool> selected: false;
+    callback activated();
+
+    width: 400px;
+    height: 225px;
+    background: Globals.background-color;
+    border-width: root.selected ? 6px : 0px;
+    border-color: #fff;
+    
+    // for testing @image-url("../assets/games/1/game.png");
+    // for production root.cover;  root.title;
+    Image {x:6px; y:6px; width: 398px; height: 218px; source: root.cover; image-fit: ImageFit.cover;   }
+    TouchArea { clicked => { root.activated(); } }
+}

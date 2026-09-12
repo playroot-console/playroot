@@ -1,0 +1,20 @@
+[package]
+name = "openconsole"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[features]
+default = []
+sdl-input = ["dep:sdl2"]
+
+[dependencies]
+evdev = "0.12"
+nix = "0.23"
+sdl2 = { version = "0.37", features = ["use-pkgconfig"], optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+slint = { version = "1", default-features = false, features = ["backend-winit", "renderer-femtovg", "compat-1-2"] }
+
+[build-dependencies]
+slint-build = "1"

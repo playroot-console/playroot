@@ -1,0 +1,107 @@
+export component ManageControllersView inherits Rectangle {
+    in property <bool> focused: false;
+    in property <[string]> controller-item-names: [];
+    in property <string> status-text: "";
+    in property <int> selected-action: 0;
+
+    background: #0b0c10;
+
+    property <length> controller-item-spacing: 20px;
+    property <length> controller-item-height: 60px;
+    property <length> controller-item-width: 600px;
+    property <length> controller-item-radius: 30px;
+    property <length> controller-list-start-y: 160px;
+
+    in property <int> selected-controller: 0;
+
+    Text {
+        y: 72px;
+        width: parent.width;
+        text: "Manage Game Controllers";
+        color: #f4f7f5;
+        font-size: 42px;
+        font-weight: 800;
+        horizontal-alignment: center;
+    }
+
+
+    // controller item
+    for controller_name[index] in root.controller-item-names : Rectangle {
+        x: parent.width / 2 - root.controller-item-width / 2;
+        y: root.controller-list-start-y + index * (root.controller-item-height + root.controller-item-spacing);
+        width: root.controller-item-width;
+        height: root.controller-item-height;
+
+        Rectangle {
+            x: 0px;
+            y: 0px;
+            width: root.controller-item-width - 135px;
+            height: root.controller-item-height;
+            background: root.focused && root.selected-controller == index && root.selected-action == 0 ? #ffffff : #414141;
+            border-radius: root.controller-item-radius;
+
+            Text {
+                x: 30px;
+                y: 0px;
+                width: root.controller-item-width - 180px;
+                height: root.controller-item-height;
+                text: controller_name;
+                color: root.focused && root.selected-controller == index && root.selected-action == 0 ? #414141 : #ffffff;
+                font-size: 18px;
+                horizontal-alignment: left;
+                vertical-alignment: center;
+            }
+        }
+
+        Rectangle {
+            x: parent.width - 120px;
+            y: 0px;
+            width: 120px;
+            height: root.controller-item-height;
+            background: root.focused && root.selected-controller == index && root.selected-action == 1 ? #ffffff : #a54444;
+            border-radius: root.controller-item-radius;
+
+            Text {
+                x: 0px;
+                y: 0px;
+                width: 120px;
+                height: root.controller-item-height;
+                text: "Remove";
+                color: root.focused && root.selected-controller == index && root.selected-action == 1 ? #000000 : #fab1b1;
+                font-size: 18px;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+    }
+
+    Rectangle {
+        x: parent.width / 2 - root.controller-item-width / 2;
+        y: root.controller-list-start-y + root.controller-item-names.length * (root.controller-item-height + root.controller-item-spacing);
+        width: root.controller-item-width;
+        height: root.controller-item-height;
+
+        Rectangle {
+            x: 0px;
+            y: 0px;
+            width: root.controller-item-width;
+            height: root.controller-item-height;
+            background: root.focused && root.selected-controller == root.controller-item-names.length && root.selected-action == 0 ? #ffffff : #5ba069;
+            border-radius: root.controller-item-radius;
+
+            Text {
+                x: 0px;
+                y: 0px;
+                width: root.controller-item-width;
+                height: root.controller-item-height;
+                text: "Add Controller";
+                color: root.focused && root.selected-controller == root.controller-item-names.length && root.selected-action == 0 ? #000000 : #d0ffd6;
+                font-size: 18px;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+        }
+    }
+
+
+}

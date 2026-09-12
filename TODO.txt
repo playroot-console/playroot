@@ -1,0 +1,6 @@
+PlayRoot roadmap
+
+- Add more games.
+- Support downloadable game catalog updates from a remote manifest, replacing the current built-in example games and bundled assets.
+- Improve controller coverage for Bluetooth devices and additional console gamepads.
+- Support generic Intel-based systems.

@@ -1,0 +1,54 @@
+# Release-branch pinned manifest for development.
+# Before the first production release, replace release branches with exact
+# commit SHAs or generate a lock file and treat that lock file as the build input.
+
+header:
+  version: 11
+
+machine: piconsole-rpi4-64
+distro: piconsole
+
+target:
+  - piconsole-image
+
+repos:
+  poky:
+    url: https://git.yoctoproject.org/poky
+    refspec: scarthgap
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+
+  meta-openembedded:
+    url: https://git.openembedded.org/meta-openembedded
+    refspec: scarthgap
+    layers:
+      meta-oe:
+      meta-networking:
+      meta-multimedia:
+      meta-python:
+      meta-filesystems:
+
+  meta-raspberrypi:
+    url: https://git.yoctoproject.org/meta-raspberrypi
+    refspec: scarthgap
+
+  meta-rust:
+    url: https://github.com/meta-rust/meta-rust.git
+    refspec: scarthgap
+
+  meta-rauc:
+    url: https://github.com/rauc/meta-rauc.git
+    refspec: scarthgap
+
+  meta-piconsole:
+    path: ../meta-piconsole
+
+local_conf_header:
+  piconsole: |
+    CONF_VERSION = "2"
+    # Raspberry Pi WiFi/BT firmware in meta-raspberrypi is gated behind
+    # the Synaptics license flag; accept it explicitly to keep the build
+    # reproducible and avoid per-workstation local.conf edits.
+    LICENSE_FLAGS_ACCEPTED += " synaptics-killswitch"

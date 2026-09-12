@@ -1,0 +1,26 @@
+import { Globals } from "../globals.slint";
+
+export component TopGameTile inherits Rectangle {
+    in property <string> position;
+    in property <string> title;
+    in property <string> subtitle;
+    in property <image> cover;
+    in property <bool> selected: false;
+    in property <bool> show-title: true;
+    callback activated();
+
+    width: 620px;
+    height: 230px; 
+    background: Globals.background-color;
+    //border-width: root.selected ? 6px : 0px;
+    border-color: #fff;
+    
+    // for testing @image-url("../assets/games/1/game.png");
+    // for production root.cover;  root.title;
+    Text { x: 0px; y: 6px; width: 210px; height: 400px; font-size: 400px; text: root.position; color: #fff; horizontal-alignment: left; vertical-alignment: center; font-family: "Arial Black"; font-weight: 800; }
+    Rectangle { 
+        x:150px; y:0px; width: 500px; height: 375px; border-width: root.selected ? 6px : 0px; border-color: #fff; 
+        Image {x:6px; y:6px; width: 488px; height: 363px; source: root.cover; image-fit: ImageFit.cover;}
+    }
+    TouchArea { clicked => { root.activated(); } }
+}
